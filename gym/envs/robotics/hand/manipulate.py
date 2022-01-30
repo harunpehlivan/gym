@@ -134,8 +134,7 @@ class ManipulateEnv(hand_env.HandEnv):
         d_pos, d_rot = self._goal_distance(achieved_goal, desired_goal)
         achieved_pos = (d_pos < self.distance_threshold).astype(np.float32)
         achieved_rot = (d_rot < self.rotation_threshold).astype(np.float32)
-        achieved_both = achieved_pos * achieved_rot
-        return achieved_both
+        return achieved_pos * achieved_rot
 
     def _env_setup(self, initial_qpos):
         for name, value in initial_qpos.items():
@@ -190,8 +189,7 @@ class ManipulateEnv(hand_env.HandEnv):
             self.sim.forward()
             cube_middle_idx = self.sim.model.site_name2id('object:center')
             cube_middle_pos = self.sim.data.site_xpos[cube_middle_idx]
-            is_on_palm = (cube_middle_pos[2] > 0.04)
-            return is_on_palm
+            return (cube_middle_pos[2] > 0.04)
 
         # Run the simulation for a bunch of timesteps to let everything settle in.
         for _ in range(10):
@@ -241,8 +239,7 @@ class ManipulateEnv(hand_env.HandEnv):
         assert target_quat.shape == (4,)
 
         target_quat /= np.linalg.norm(target_quat)  # normalized quaternion
-        goal = np.concatenate([target_pos, target_quat])
-        return goal
+        return np.concatenate([target_pos, target_quat])
 
     def _render_callback(self):
         # Assign current state to target object but offset a bit so that the actual object

@@ -45,7 +45,7 @@ def generate_random_map(size=8, p=0.8):
         frontier.append((0, 0))
         while frontier:
             r, c = frontier.pop()
-            if not (r, c) in discovered:
+            if (r, c) not in discovered:
                 discovered.add((r, c))
                 directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
                 for x, y in directions:

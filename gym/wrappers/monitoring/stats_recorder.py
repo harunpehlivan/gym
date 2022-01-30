@@ -56,10 +56,9 @@ class StatsRecorder(object):
         if done:
             self.save_complete()
 
-        if done:
-            if self.autoreset:
-                self.before_reset()
-                self.after_reset(observation)
+        if done and self.autoreset:
+            self.before_reset()
+            self.after_reset(observation)
 
     def before_reset(self):
         assert not self.closed

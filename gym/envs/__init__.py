@@ -593,14 +593,7 @@ for game in ['adventure', 'air_raid', 'alien', 'amidar', 'assault', 'asterix', '
         if obs_type == 'ram':
             name = '{}-ram'.format(name)
 
-        nondeterministic = False
-        if game == 'elevator_action' and obs_type == 'ram':
-            # ElevatorAction-ram-v0 seems to yield slightly
-            # non-deterministic observations about 10% of the time. We
-            # should track this down eventually, but for now we just
-            # mark it as nondeterministic.
-            nondeterministic = True
-
+        nondeterministic = game == 'elevator_action' and obs_type == 'ram'
         register(
             id='{}-v0'.format(name),
             entry_point='gym.envs.atari:AtariEnv',
@@ -618,11 +611,7 @@ for game in ['adventure', 'air_raid', 'alien', 'amidar', 'assault', 'asterix', '
         )
 
         # Standard Deterministic (as in the original DeepMind paper)
-        if game == 'space_invaders':
-            frameskip = 3
-        else:
-            frameskip = 4
-
+        frameskip = 3 if game == 'space_invaders' else 4
         # Use a deterministic frame skip.
         register(
             id='{}Deterministic-v0'.format(name),

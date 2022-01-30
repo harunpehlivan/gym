@@ -29,8 +29,7 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         mujoco_env.MujocoEnv.__init__(self, xml_file, 5)
 
     def control_cost(self, action):
-        control_cost = self._ctrl_cost_weight * np.sum(np.square(action))
-        return control_cost
+        return self._ctrl_cost_weight * np.sum(np.square(action))
 
     def step(self, action):
         x_position_before = self.sim.data.qpos[0]
@@ -63,8 +62,7 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         if self._exclude_current_positions_from_observation:
             position = position[1:]
 
-        observation = np.concatenate((position, velocity)).ravel()
-        return observation
+        return np.concatenate((position, velocity)).ravel()
 
     def reset_model(self):
         noise_low = -self._reset_noise_scale
@@ -77,8 +75,7 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle):
 
         self.set_state(qpos, qvel)
 
-        observation = self._get_obs()
-        return observation
+        return self._get_obs()
 
     def viewer_setup(self):
         for key, value in DEFAULT_CAMERA_CONFIG.items():

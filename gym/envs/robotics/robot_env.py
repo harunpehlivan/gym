@@ -81,8 +81,7 @@ class RobotEnv(gym.GoalEnv):
         while not did_reset_sim:
             did_reset_sim = self._reset_sim()
         self.goal = self._sample_goal().copy()
-        obs = self._get_obs()
-        return obs
+        return self._get_obs()
 
     def close(self):
         if self.viewer is not None:

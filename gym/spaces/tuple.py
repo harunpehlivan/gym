@@ -19,7 +19,7 @@ class Tuple(Space):
         [space.seed(seed) for space in self.spaces]
 
     def sample(self):
-        return tuple([space.sample() for space in self.spaces])
+        return tuple(space.sample() for space in self.spaces)
 
     def contains(self, x):
         if isinstance(x, list):
@@ -36,7 +36,14 @@ class Tuple(Space):
                 for i, space in enumerate(self.spaces)]
 
     def from_jsonable(self, sample_n):
-        return [sample for sample in zip(*[space.from_jsonable(sample_n[i]) for i, space in enumerate(self.spaces)])]
+        return list(
+            zip(
+                *[
+                    space.from_jsonable(sample_n[i])
+                    for i, space in enumerate(self.spaces)
+                ]
+            )
+        )
 
     def __getitem__(self, index):
         return self.spaces[index]

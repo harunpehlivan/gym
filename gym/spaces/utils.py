@@ -21,9 +21,9 @@ def flatdim(space):
     elif isinstance(space, Discrete):
         return int(space.n)
     elif isinstance(space, Tuple):
-        return int(sum([flatdim(s) for s in space.spaces]))
+        return int(sum(flatdim(s) for s in space.spaces))
     elif isinstance(space, Dict):
-        return int(sum([flatdim(s) for s in space.spaces.values()]))
+        return int(sum(flatdim(s) for s in space.spaces.values()))
     elif isinstance(space, MultiBinary):
         return int(space.n)
     elif isinstance(space, MultiDiscrete):

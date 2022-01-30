@@ -1,14 +1,12 @@
 """
 2D rendering framework
 """
+
 import os
 import sys
 
-if "Apple" in sys.version:
-    if 'DYLD_FALLBACK_LIBRARY_PATH' in os.environ:
-        os.environ['DYLD_FALLBACK_LIBRARY_PATH'] += ':/usr/lib'
-        # (JDS 2016/04/15): avoid bug on Anaconda 2.3.0 / Yosemite
-
+if "Apple" in sys.version and 'DYLD_FALLBACK_LIBRARY_PATH' in os.environ:
+    os.environ['DYLD_FALLBACK_LIBRARY_PATH'] += ':/usr/lib'
 from gym import error
 
 try:
@@ -258,14 +256,10 @@ def make_circle(radius=10, res=30, filled=True):
     for i in range(res):
         ang = 2*math.pi*i / res
         points.append((math.cos(ang)*radius, math.sin(ang)*radius))
-    if filled:
-        return FilledPolygon(points)
-    else:
-        return PolyLine(points, True)
+    return FilledPolygon(points) if filled else PolyLine(points, True)
 
 def make_polygon(v, filled=True):
-    if filled: return FilledPolygon(v)
-    else: return PolyLine(v, True)
+    return FilledPolygon(v) if filled else PolyLine(v, True)
 
 def make_polyline(v):
     return PolyLine(v, False)
@@ -276,8 +270,7 @@ def make_capsule(length, width):
     circ0 = make_circle(width/2)
     circ1 = make_circle(width/2)
     circ1.add_attr(Transform(translation=(length, 0)))
-    geom = Compound([box, circ0, circ1])
-    return geom
+    return Compound([box, circ0, circ1])
 
 class Compound(Geom):
     def __init__(self, gs):

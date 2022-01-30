@@ -45,35 +45,30 @@ class AntEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         ) * self._healthy_reward
 
     def control_cost(self, action):
-        control_cost = self._ctrl_cost_weight * np.sum(np.square(action))
-        return control_cost
+        return self._ctrl_cost_weight * np.sum(np.square(action))
 
     @property
     def contact_forces(self):
         raw_contact_forces = self.sim.data.cfrc_ext
         min_value, max_value = self._contact_force_range
-        contact_forces = np.clip(raw_contact_forces, min_value, max_value)
-        return contact_forces
+        return np.clip(raw_contact_forces, min_value, max_value)
 
     @property
     def contact_cost(self):
-        contact_cost = self._contact_cost_weight * np.sum(
+        return self._contact_cost_weight * np.sum(
             np.square(self.contact_forces))
-        return contact_cost
 
     @property
     def is_healthy(self):
         state = self.state_vector()
         min_z, max_z = self._healthy_z_range
-        is_healthy = (np.isfinite(state).all() and min_z <= state[2] <= max_z)
-        return is_healthy
+        return (np.isfinite(state).all() and min_z <= state[2] <= max_z)
 
     @property
     def done(self):
-        done = (not self.is_healthy
+        return (not self.is_healthy
                 if self._terminate_when_unhealthy
                 else False)
-        return done
 
     def step(self, action):
         xy_position_before = self.get_body_com("torso")[:2].copy()
@@ -120,9 +115,7 @@ class AntEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         if self._exclude_current_positions_from_observation:
             position = position[2:]
 
-        observations = np.concatenate((position, velocity, contact_force))
-
-        return observations
+        return np.concatenate((position, velocity, contact_force))
 
     def reset_model(self):
         noise_low = -self._reset_noise_scale
@@ -134,9 +127,7 @@ class AntEnv(mujoco_env.MujocoEnv, utils.EzPickle):
             self.model.nv)
         self.set_state(qpos, qvel)
 
-        observation = self._get_obs()
-
-        return observation
+        return self._get_obs()
 
     def viewer_setup(self):
         for key, value in DEFAULT_CAMERA_CONFIG.items():

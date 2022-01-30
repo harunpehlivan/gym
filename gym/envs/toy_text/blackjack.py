@@ -20,13 +20,11 @@ def draw_hand(np_random):
 
 
 def usable_ace(hand):  # Does this hand have a usable ace?
-    return 1 in hand and sum(hand) + 10 <= 21
+    return 1 in hand and sum(hand) <= 11
 
 
 def sum_hand(hand):  # Return current hand total
-    if usable_ace(hand):
-        return sum(hand) + 10
-    return sum(hand)
+    return sum(hand) + 10 if usable_ace(hand) else sum(hand)
 
 
 def is_bust(hand):  # Is this hand a bust?

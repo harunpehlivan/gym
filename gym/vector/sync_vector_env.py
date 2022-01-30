@@ -90,7 +90,7 @@ class SyncVectorEnv(VectorEnv):
 
     def _check_observation_spaces(self):
         for env in self.envs:
-            if not (env.observation_space == self.single_observation_space):
+            if env.observation_space != self.single_observation_space:
                 break
         else:
             return True

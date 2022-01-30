@@ -160,19 +160,19 @@ class CartPoleEnv(gym.Env):
 
     def render(self, mode='human'):
         screen_width = 600
-        screen_height = 400
-
         world_width = self.x_threshold * 2
         scale = screen_width/world_width
         carty = 100  # TOP OF CART
         polewidth = 10.0
         polelen = scale * (2 * self.length)
-        cartwidth = 50.0
-        cartheight = 30.0
-
         if self.viewer is None:
             from gym.envs.classic_control import rendering
+            screen_height = 400
+
             self.viewer = rendering.Viewer(screen_width, screen_height)
+            cartwidth = 50.0
+            cartheight = 30.0
+
             l, r, t, b = -cartwidth / 2, cartwidth / 2, cartheight / 2, -cartheight / 2
             axleoffset = cartheight / 4.0
             cart = rendering.FilledPolygon([(l, b), (l, t), (r, t), (r, b)])

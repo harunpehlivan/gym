@@ -175,10 +175,12 @@ class AtariEnv(gym.Env, utils.EzPickle):
         keys_to_action = {}
 
         for action_id, action_meaning in enumerate(self.get_action_meanings()):
-            keys = []
-            for keyword, key in KEYWORD_TO_KEY.items():
-                if keyword in action_meaning:
-                    keys.append(key)
+            keys = [
+                key
+                for keyword, key in KEYWORD_TO_KEY.items()
+                if keyword in action_meaning
+            ]
+
             keys = tuple(sorted(keys))
 
             assert keys not in keys_to_action

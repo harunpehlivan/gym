@@ -18,7 +18,7 @@ def test_record_episode_statistics(env_id, deque_size):
             _, _, done, info = env.step(env.action_space.sample())
             if done:
                 assert 'episode' in info
-                assert all([item in info['episode'] for item in ['r', 'l', 't']])
+                assert all(item in info['episode'] for item in ['r', 'l', 't'])
                 break
     assert len(env.return_queue) == deque_size
     assert len(env.length_queue) == deque_size

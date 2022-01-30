@@ -27,17 +27,14 @@ class MultiBinary(Space):
     '''
     def __init__(self, n):
         self.n = n
-        if type(n) in [tuple, list, np.ndarray]:
-            input_n = n
-        else:
-            input_n = (n, )
+        input_n = n if type(n) in [tuple, list, np.ndarray] else (n, )
         super(MultiBinary, self).__init__(input_n, np.int8)
 
     def sample(self):
         return self.np_random.randint(low=0, high=2, size=self.n, dtype=self.dtype)
 
     def contains(self, x):
-        if isinstance(x, list) or isinstance(x, tuple):
+        if isinstance(x, (list, tuple)):
             x = np.array(x)  # Promote list to array for contains check
         if self.shape != x.shape:
             return False
