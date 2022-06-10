@@ -137,8 +137,7 @@ class TaxiEnv(discrete.DiscreteEnv):
         return i
 
     def decode(self, i):
-        out = []
-        out.append(i % 4)
+        out = [i % 4]
         i = i // 4
         out.append(i % 5)
         i = i // 5

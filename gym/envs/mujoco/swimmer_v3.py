@@ -26,13 +26,12 @@ class SwimmerEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         mujoco_env.MujocoEnv.__init__(self, xml_file, 4)
 
     def control_cost(self, action):
-        control_cost = self._ctrl_cost_weight * np.sum(np.square(action))
-        return control_cost
+        return self._ctrl_cost_weight * np.sum(np.square(action))
 
     def step(self, action):
         xy_position_before = self.sim.data.qpos[0:2].copy()
         self.do_simulation(action, self.frame_skip)
-        xy_position_after = self.sim.data.qpos[0:2].copy()
+        xy_position_after = self.sim.data.qpos[:2].copy()
 
         xy_velocity = (xy_position_after - xy_position_before) / self.dt
         x_velocity, y_velocity = xy_velocity
@@ -66,8 +65,7 @@ class SwimmerEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         if self._exclude_current_positions_from_observation:
             position = position[2:]
 
-        observation = np.concatenate([position, velocity]).ravel()
-        return observation
+        return np.concatenate([position, velocity]).ravel()
 
     def reset_model(self):
         noise_low = -self._reset_noise_scale
@@ -80,8 +78,7 @@ class SwimmerEnv(mujoco_env.MujocoEnv, utils.EzPickle):
 
         self.set_state(qpos, qvel)
 
-        observation = self._get_obs()
-        return observation
+        return self._get_obs()
 
     def viewer_setup(self):
         for key, value in DEFAULT_CAMERA_CONFIG.items():

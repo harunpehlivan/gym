@@ -22,8 +22,7 @@ class FakeEnvironment(gym.Env):
         return np.zeros(image_shape, dtype=np.uint8)
 
     def reset(self):
-        observation = self.observation_space.sample()
-        return observation
+        return self.observation_space.sample()
 
     def step(self, action):
         del action

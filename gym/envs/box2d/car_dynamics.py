@@ -118,7 +118,7 @@ class Car:
         gas = np.clip(gas, 0, 1)
         for w in self.wheels[2:4]:
             diff = gas - w.gas
-            if diff > 0.1: diff = 0.1  # gradually increase, but stop immediately
+            diff = min(diff, 0.1)
             w.gas += diff
 
     def brake(self, b):

@@ -128,14 +128,11 @@ class AlgorithmicEnv(Env):
         x_str = self.render_observation()
         for i in range(-2, len(self.target) + 2):
             target_str += self._get_str_target(i)
-            if i < y - 1:
+            if i >= y - 1 and i == (y - 1) and action is not None and out_act == 1:
+                color = 'green' if pred == self.target[i] else 'red'
+                y_str += colorize(pred_str, color, highlight=True)
+            elif i >= y - 1 and i == (y - 1) or i < y - 1:
                 y_str += self._get_str_target(i)
-            elif i == (y - 1):
-                if action is not None and out_act == 1:
-                    color = 'green' if pred == self.target[i] else 'red'
-                    y_str += colorize(pred_str, color, highlight=True)
-                else:
-                    y_str += self._get_str_target(i)
         outfile.write(x_str)
         outfile.write(y_str + "\n")
         outfile.write(target_str + "\n\n")

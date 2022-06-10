@@ -8,7 +8,7 @@ import sys
 from gym import error
 
 def np_random(seed=None):
-    if seed is not None and not (isinstance(seed, int) and 0 <= seed):
+    if seed is not None and not (isinstance(seed, int) and seed >= 0):
         raise error.Error('Seed must be a non-negative integer or omitted, not {}'.format(seed))
 
     seed = create_seed(seed)
@@ -69,12 +69,9 @@ def _bigint_from_bytes(bytes):
     sizeof_int = 4
     padding = sizeof_int - len(bytes) % sizeof_int
     bytes += b'\0' * padding
-    int_count = int(len(bytes) / sizeof_int)
+    int_count = len(bytes) // sizeof_int
     unpacked = struct.unpack("{}I".format(int_count), bytes)
-    accum = 0
-    for i, val in enumerate(unpacked):
-        accum += 2 ** (sizeof_int * 8 * i) * val
-    return accum
+    return sum(2 ** (sizeof_int * 8 * i) * val for i, val in enumerate(unpacked))
 
 def _int_list_from_bigint(bigint):
     # Special case 0

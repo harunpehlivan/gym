@@ -156,12 +156,10 @@ class MemorizeDigits(gym.Env):
         reward = -1
         done = False
         self.step_n += 1
-        if self.digit==-1:
-            pass
-        else:
+        if self.digit != -1:
             if self.digit==action:
                 reward = +1
-            done = self.step_n > 20 and 0==self.np_random.randint(low=0, high=5)
+            done = self.step_n > 20 and self.np_random.randint(low=0, high=5) == 0
         self.digit = self.np_random.randint(low=0, high=10)
         obs = np.zeros( (FIELD_H,FIELD_W,3), dtype=np.uint8 )
         obs[:,:,:] = self.color_bg

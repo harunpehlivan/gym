@@ -16,8 +16,7 @@ env_id_re = re.compile(r'^(?:[\w:-]+\/)?([\w:.-]+)-v(\d+)$')
 def load(name):
     mod_name, attr_name = name.split(":")
     mod = importlib.import_module(mod_name)
-    fn = getattr(mod, attr_name)
-    return fn
+    return getattr(mod, attr_name)
 
 
 class EnvSpec(object):
@@ -123,9 +122,11 @@ class EnvRegistry(object):
             # Parse the env name and check to see if it matches the non-version
             # part of a valid env (could also check the exact number here)
             env_name = match.group(1)
-            matching_envs = [valid_env_name for valid_env_name, valid_env_spec in self.env_specs.items()
-                             if env_name == valid_env_spec._env_name]
-            if matching_envs:
+            if matching_envs := [
+                valid_env_name
+                for valid_env_name, valid_env_spec in self.env_specs.items()
+                if env_name == valid_env_spec._env_name
+            ]:
                 raise error.DeprecatedEnv('Env {} not found (valid versions include {})'.format(id, matching_envs))
             else:
                 raise error.UnregisteredEnv('No registered env with id: {}'.format(id))

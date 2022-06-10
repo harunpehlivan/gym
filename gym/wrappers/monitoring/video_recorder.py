@@ -103,11 +103,10 @@ class VideoRecorder(object):
         if frame is None:
             if self._async:
                 return
-            else:
-                # Indicates a bug in the environment: don't want to raise
-                # an error here.
-                logger.warn('Env returned None on render(). Disabling further rendering for video recorder by marking as disabled: path=%s metadata_path=%s', self.path, self.metadata_path)
-                self.broken = True
+            # Indicates a bug in the environment: don't want to raise
+            # an error here.
+            logger.warn('Env returned None on render(). Disabling further rendering for video recorder by marking as disabled: path=%s metadata_path=%s', self.path, self.metadata_path)
+            self.broken = True
         else:
             self.last_frame = frame
             if self.ansi_mode:
@@ -212,8 +211,15 @@ class TextEncoder(object):
 
         # Calculate frame size from the largest frames.
         # Add some padding since we'll get cut off otherwise.
-        height = max([frame.count(b'\n') for frame in self.frames]) + 1
-        width = max([max([len(line) for line in frame.split(b'\n')]) for frame in self.frames]) + 2
+        height = max(frame.count(b'\n') for frame in self.frames) + 1
+        width = (
+            max(
+                max(len(line) for line in frame.split(b'\n'))
+                for frame in self.frames
+            )
+            + 2
+        )
+
 
         data = {
             "version": 1,
@@ -239,7 +245,7 @@ class ImageEncoder(object):
         self.output_path = output_path
         # Frame shape should be lines-first, so w and h are swapped
         h, w, pixfmt = frame_shape
-        if pixfmt != 3 and pixfmt != 4:
+        if pixfmt not in [3, 4]:
             raise error.InvalidFrame("Your frame has shape {}, but we require (w,h,3) or (w,h,4), i.e., RGB values for a w-by-h image, with an optional alpha channel.".format(frame_shape))
         self.wh = (w,h)
         self.includes_alpha = (pixfmt == 4)

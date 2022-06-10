@@ -66,7 +66,7 @@ class ContactDetector(contactListener):
         self.env = env
 
     def BeginContact(self, contact):
-        if self.env.lander == contact.fixtureA.body or self.env.lander == contact.fixtureB.body:
+        if self.env.lander in [contact.fixtureA.body, contact.fixtureB.body]:
             self.env.game_over = True
         for i in range(2):
             if self.env.legs[i] in [contact.fixtureA.body, contact.fixtureB.body]:
@@ -406,8 +406,8 @@ def heuristic(env, s):
     """
 
     angle_targ = s[0]*0.5 + s[2]*1.0         # angle should point towards center
-    if angle_targ > 0.4: angle_targ = 0.4    # more than 0.4 radians (22 degrees) is bad
-    if angle_targ < -0.4: angle_targ = -0.4
+    angle_targ = min(angle_targ, 0.4)
+    angle_targ = max(angle_targ, -0.4)
     hover_targ = 0.55*np.abs(s[0])           # target y should be proportional to horizontal offset
 
     angle_todo = (angle_targ - s[4]) * 0.5 - (s[5])*1.0

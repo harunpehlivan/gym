@@ -44,14 +44,14 @@ def update_rollout_dict(spec, rollout_dict):
         logger.warn("Exception {} thrown while generating rollout for {}. Rollout not added.".format(sys.exc_info()[0], spec.id))
         return False
 
-    rollout = {}
-    rollout['observations'] = observations_hash
-    rollout['actions'] = actions_hash
-    rollout['rewards'] = rewards_hash
-    rollout['dones'] = dones_hash
+    rollout = {
+        'observations': observations_hash,
+        'actions': actions_hash,
+        'rewards': rewards_hash,
+        'dones': dones_hash,
+    }
 
-    existing = rollout_dict.get(spec.id)
-    if existing:
+    if existing := rollout_dict.get(spec.id):
         differs = False
         for key, new_hash in rollout.items():
             differs = differs or existing[key] != new_hash

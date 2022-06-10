@@ -55,9 +55,6 @@ class ManipulateTouchSensorsEnv(manipulate.ManipulateEnv):
         if self.touch_visualisation == 'off':  # set touch sensors rgba values
             for _, site_id in self._touch_sensor_id_site_id:
                 self.sim.model.site_rgba[site_id][3] = 0.0
-        elif self.touch_visualisation == 'always':
-            pass
-
         obs = self._get_obs()
         self.observation_space = spaces.Dict(dict(
             desired_goal=spaces.Box(-np.inf, np.inf, shape=obs['achieved_goal'].shape, dtype='float32'),

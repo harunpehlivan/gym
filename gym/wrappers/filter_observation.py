@@ -30,10 +30,9 @@ class FilterObservation(ObservationWrapper):
         if filter_keys is None:
             filter_keys = tuple(observation_keys)
 
-        missing_keys = set(
-            key for key in filter_keys if key not in observation_keys)
-
-        if missing_keys:
+        if missing_keys := {
+            key for key in filter_keys if key not in observation_keys
+        }:
             raise ValueError(
                 "All the filter_keys must be included in the "
                 "original obsrevation space.\n"
@@ -55,8 +54,7 @@ class FilterObservation(ObservationWrapper):
         self._filter_keys = tuple(filter_keys)
 
     def observation(self, observation):
-        filter_observation = self._filter_observation(observation)
-        return filter_observation
+        return self._filter_observation(observation)
 
     def _filter_observation(self, observation):
         observation = type(observation)([

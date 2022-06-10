@@ -280,8 +280,7 @@ def quat_mul(q0, q1):
 def quat_rot_vec(q, v0):
     q_v0 = np.array([0, v0[0], v0[1], v0[2]])
     q_v = quat_mul(q, quat_mul(q_v0, quat_conjugate(q)))
-    v = q_v[1:]
-    return v
+    return q_v[1:]
 
 def quat_identity():
     return np.array([1, 0, 0, 0])
@@ -363,7 +362,7 @@ def get_parallel_rotations():
         if canonical[2] == -2:
             canonical[2] = 2
         canonical *= np.pi / 2
-        if all([(canonical != rot).any() for rot in parallel_rotations]):
+        if all((canonical != rot).any() for rot in parallel_rotations):
             parallel_rotations += [canonical]
     assert len(parallel_rotations) == 24
     return parallel_rotations

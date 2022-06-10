@@ -107,7 +107,7 @@ class CubeCrash(gym.Env):
             reward = (self.potential - dist) * 0.01
         self.potential = dist
 
-        if self.cube_x-1 < 0 or self.cube_x+1 >= FIELD_W:
+        if self.cube_x < 1 or self.cube_x + 1 >= FIELD_W:
             done = True
             reward = -1
         elif self.cube_y+1 >= FIELD_H-5:

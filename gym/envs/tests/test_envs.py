@@ -15,7 +15,7 @@ def test_env(spec):
 
     # Check that dtype is explicitly declared for gym.Box spaces
     for warning_msg in warnings:
-        assert not 'autodetected dtype' in str(warning_msg.message)
+        assert 'autodetected dtype' not in str(warning_msg.message)
 
     ob_space = env.observation_space
     act_space = env.action_space

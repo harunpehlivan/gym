@@ -84,11 +84,10 @@ class APIError(Error):
         self.request_id = self.headers.get('request-id', None)
 
     def __unicode__(self):
-        if self.request_id is not None:
-            msg = self._message or "<empty message>"
-            return u"Request {0}: {1}".format(self.request_id, msg)
-        else:
+        if self.request_id is None:
             return self._message
+        msg = self._message or "<empty message>"
+        return u"Request {0}: {1}".format(self.request_id, msg)
 
     def __str__(self):
         try:               # Python 2

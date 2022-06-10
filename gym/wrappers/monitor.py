@@ -93,7 +93,7 @@ class Monitor(Wrapper):
         # We use the 'openai-gym' prefix to determine if a file is
         # ours
         self.file_prefix = FILE_PREFIX
-        self.file_infix = '{}.{}'.format(self._monitor_id, uid if uid else os.getpid())
+        self.file_infix = '{}.{}'.format(self._monitor_id, uid or os.getpid())
 
         self.stats_recorder = stats_recorder.StatsRecorder(directory, '{}.episode_batch.{}'.format(self.file_prefix, self.file_infix), autoreset=self.env_semantics_autoreset, env_id=env_id)
 
@@ -274,8 +274,7 @@ def load_env_info_from_manifests(manifests, training_dir):
             contents = json.load(f)
             env_infos.append(contents['env_info'])
 
-    env_info = collapse_env_infos(env_infos, training_dir)
-    return env_info
+    return collapse_env_infos(env_infos, training_dir)
 
 def load_results(training_dir):
     if not os.path.exists(training_dir):

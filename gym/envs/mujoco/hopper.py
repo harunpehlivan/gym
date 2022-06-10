@@ -10,7 +10,7 @@ class HopperEnv(mujoco_env.MujocoEnv, utils.EzPickle):
     def step(self, a):
         posbefore = self.sim.data.qpos[0]
         self.do_simulation(a, self.frame_skip)
-        posafter, height, ang = self.sim.data.qpos[0:3]
+        posafter, height, ang = self.sim.data.qpos[:3]
         alive_bonus = 1.0
         reward = (posafter - posbefore) / self.dt
         reward += alive_bonus

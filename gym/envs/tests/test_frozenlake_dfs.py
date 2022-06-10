@@ -11,7 +11,7 @@ def test_frozenlake_dfs_map_generation():
         frontier.append((0,0))
         while frontier:
             r, c = frontier.pop()
-            if not (r,c) in discovered:
+            if (r, c) not in discovered:
                 discovered.add((r,c))
                 directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
                 for x, y in directions:
